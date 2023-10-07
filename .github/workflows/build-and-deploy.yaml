@@ -1,0 +1,22 @@
+name: Build and Deploy
+run-name: ${{ github.actor}} merged the Pull Request !!
+on: 
+	push:
+		branches:
+			- main
+	workflow_dispatch:
+jobs:
+	build-and-deploy:
+		runs-on: self-hosted
+		steps:
+			- name: Check out repository code
+				uses: actions/checkout@v3
+
+			- name: Stop Containers
+				if: always()
+				run: docker compose -f "docker-compose.yaml" down
+
+			- name: Deploy Web Server & App Server & Database
+				run: docker compose -f ./docker-compose.yaml up -d
+
+			- run: echo "This job's status is ${{ job.status }}."

@@ -1,0 +1,14 @@
+services:
+  web:
+    image: hw:test-cd
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - "5000:80"
+  nginx:
+    image: nginx:alpine
+    restart: on-failure
+    ports:
+      - "4000:80"
